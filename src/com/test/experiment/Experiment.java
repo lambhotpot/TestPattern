@@ -19,14 +19,12 @@ public class Experiment {
 
 
 
-
-
     public static void process() {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple2.jpg");
 
-        // Mat src = Imgcodecs.imread("src/resources/data/demo-images/scattered1.jpg");
+        //Mat src = Imgcodecs.imread("src/resources/data/demo-images/scattered1.jpg");
         //Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple3.jpg");
         //Mat src = Imgcodecs.imread("src/resources/data/demo-images/bambu2.jpg");
         Mat greyed = new Mat();
@@ -39,48 +37,79 @@ public class Experiment {
         Mat lines = new Mat();
         Mat closed =new Mat();
 
+
+        /**
+         *  Step 1: resize the image to 20%
+         */
+
         Imgproc.resize(src, src, new Size(src.width()*0.2,src.height()*0.2));
+        System.out.println("width = " +src.width() + " height: " + src.height());
+
+        /**
+         * Step 2: convert the color to grey
+         */
+
         Imgproc.cvtColor(src, greyed, Imgproc.COLOR_RGB2GRAY);
 
-      /*  CLAHE clahe = Imgproc.createCLAHE(50.0, new Size(5, 5));
+
+        /** Unused
+         * ClAHE is used to adjust contrast to help with clear edging
+         */
+      /*CLAHE clahe = Imgproc.createCLAHE(50.0, new Size(5, 5));
         clahe.apply(greyed,greyed);
         draw(greyed,"clahe");*/
 
+        /**
+         * Step 3: blur the image with 5*5 pixel to smooth out background noise
+         */
         Imgproc.GaussianBlur(greyed, greyed, new Size(5, 5), 0);
-        System.out.println("width = " +src.width() + " height: " + src.height());
 
 
+        /**
+         * Unused: Sobel algorithm for edge detection
+         */
         //Imgproc.Sobel(greyed,greyed, CvType.CV_8UC1,1,0);
         //Imgproc.Sobel(greyed,greyed, CvType.CV_8UC1,0,1);
-
         //Imgcodecs.imwrite("gsobelx.jpg",greyed);
 
 
+        /**
+         * Step 4: Use Canny algorithm to find edge.  Aperture size =3
+         */
         Imgproc.Canny(greyed, greyed, 10, 30, 3, true);
         draw(greyed,"canny");
 
 
+        /**
+         * Unused: Dilate is to fill holes on disconnect lines
+         */
         /*Imgproc.dilate(greyed,greyed, new Mat());
         draw(greyed,"dilate");*/
 
+
+        /**
+         * Unused: adaptiveThreshold with OTSU is to process image to make edge clear
+         */
         //Imgproc.adaptiveThreshold(greyed,greyed,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,11,2);
         //Imgproc.threshold(greyed, greyed, 0, 255, Imgproc.THRESH_BINARY + Imgproc.THRESH_OTSU);
         //draw(greyed,"threshed");
 
 
-        /**
-         *    construct and apply a closing kernel to 'close' gaps between 'white'
-         *    //pixels
-         */
 
-/*
-        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(3, 3));
+
+        /**
+         * Unused: construct and apply a closing kernel to 'close' gaps between 'white' pixels
+         *
+         */
+        /*Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(3, 3));
         Imgproc.morphologyEx(greyed, closed,Imgproc.MORPH_CLOSE, kernel);
         draw(closed,"closed");*/
 
 
 
-        /**
+        /** Unused:HoughLinesP for line detection
+         *
+         * Parameters
          * image: Output of the edge detector. It should be a grayscale image.
            lines: A vector that will store the parameters  of the detected lines
            rho: The resolution of the parameter in pixels. We use 1 pixel.
@@ -90,7 +119,6 @@ public class Experiment {
 
 /*
         Mat lineClone = src.clone();
-
         int threshold = 150;
         int minLineSize = 0;
         int lineGap = 0;
@@ -102,11 +130,11 @@ public class Experiment {
 
 
 
-
+        /**
+         * Step4: find contours
+         */
 
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-
-
         Imgproc.findContours(greyed, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
 
 
@@ -114,6 +142,9 @@ public class Experiment {
         List<MatOfPoint> hulls = new ArrayList<MatOfPoint>();
         List<MatOfPoint> rois = new ArrayList<MatOfPoint>();
 
+        /**
+         * Step5: for each contour, fit  convex hull
+         */
         for (MatOfPoint contour : contours) {
             MatOfInt hull = new MatOfInt();
             Imgproc.convexHull(contour, hull);
@@ -121,6 +152,9 @@ public class Experiment {
             hulls.add(convexHull);
         }
 
+        /**
+         * Step6: approximate each convex hull using polygon, only add those polygon with area in certain range
+         */
         for (MatOfPoint hull : hulls) {
             MatOfPoint2f contour2f = new MatOfPoint2f(hull.toArray());
             MatOfPoint2f approx = new MatOfPoint2f(hull.toArray());
@@ -137,6 +171,9 @@ public class Experiment {
         }
 
 
+        /**
+         * Step6: find the bounding rectangle for each polygon
+         */
         int index = 0;
         Mat temp = src.clone();
         System.out.println(rois.size());
@@ -151,7 +188,6 @@ public class Experiment {
         draw(temp,"rectangle");
         System.out.println(rois.size());
 
-        //drawCoutourBoxes(rois,temp2,"boudingRec.jpg");
 
 
     }
@@ -180,6 +216,11 @@ public class Experiment {
     }
 
 
+    /**
+     * Java utility draw
+     * @param m
+     * @param name
+     */
     public static void draw(Mat m, String name){
         int type = BufferedImage.TYPE_BYTE_GRAY;
         if ( m.channels() > 1 ) {
