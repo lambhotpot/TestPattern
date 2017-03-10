@@ -55,9 +55,9 @@ public class Experiment {
         /** Unused
          * ClAHE is used to adjust contrast to help with clear edging
          */
-      /*CLAHE clahe = Imgproc.createCLAHE(50.0, new Size(5, 5));
-        clahe.apply(greyed,greyed);
-        draw(greyed,"clahe");*/
+        //CLAHE clahe = Imgproc.createCLAHE(50.0, new Size(5, 5));
+        //clahe.apply(greyed,greyed);
+        //draw(greyed,"clahe");
 
         /**
          * Step 3: blur the image with 5*5 pixel to smooth out background noise
@@ -99,11 +99,10 @@ public class Experiment {
 
         /**
          * Unused: construct and apply a closing kernel to 'close' gaps between 'white' pixels
-         *
          */
-        /*Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(3, 3));
-        Imgproc.morphologyEx(greyed, closed,Imgproc.MORPH_CLOSE, kernel);
-        draw(closed,"closed");*/
+        //Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(3, 3));
+        //Imgproc.morphologyEx(greyed, closed,Imgproc.MORPH_CLOSE, kernel);
+        //draw(closed,"closed");
 
 
 
@@ -117,13 +116,13 @@ public class Experiment {
            threshold: The minimum number of intersections to “detect” a line
          */
 
-/*
-        Mat lineClone = src.clone();
-        int threshold = 150;
-        int minLineSize = 0;
-        int lineGap = 0;
-        Imgproc.HoughLinesP(greyed, lines, 1, Math.PI/180, threshold, minLineSize, lineGap);
-*/
+
+        //Mat lineClone = src.clone();
+        //int threshold = 150;
+        //int minLineSize = 0;
+        //int lineGap = 0;
+        //Imgproc.HoughLinesP(greyed, lines, 1, Math.PI/180, threshold, minLineSize, lineGap);
+
 
 
 
@@ -136,8 +135,6 @@ public class Experiment {
 
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Imgproc.findContours(greyed, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
-
-
 
         List<MatOfPoint> hulls = new ArrayList<MatOfPoint>();
         List<MatOfPoint> rois = new ArrayList<MatOfPoint>();
