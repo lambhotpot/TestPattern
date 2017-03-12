@@ -22,10 +22,9 @@ public class Experiment {
     public static void process() {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple2.jpg");
-
+        //Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple2.jpg");
         //Mat src = Imgcodecs.imread("src/resources/data/demo-images/scattered1.jpg");
-        //Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple3.jpg");
+        Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple3.jpg");
         //Mat src = Imgcodecs.imread("src/resources/data/demo-images/bambu2.jpg");
         Mat greyed = new Mat();
         Mat blurred = new Mat();
