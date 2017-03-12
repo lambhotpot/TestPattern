@@ -1,14 +1,9 @@
 package com.test.experiment;
 
 import org.opencv.core.*;
-import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.CLAHE;
 import org.opencv.imgproc.Imgproc;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +71,7 @@ public class Experiment {
          * Step 4: Use Canny algorithm to find edge.  Aperture size =3
          */
         Imgproc.Canny(greyed, greyed, 10, 30, 3, true);
-        draw(greyed,"canny");
+        OpenCVUtil.draw(greyed,"canny");
 
 
         /**
@@ -181,7 +176,7 @@ public class Experiment {
             index++;
         }
 
-        draw(temp,"rectangle");
+        OpenCVUtil.draw(temp,"rectangle");
         System.out.println(rois.size());
 
 
@@ -207,35 +202,12 @@ public class Experiment {
 
             // draw enclosing rectangle (all same color, but you could use variable i to make them unique)
             Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 255, 0), 3);
-            draw(src,"rectangle");
+            OpenCVUtil.draw(src,"rectangle");
         }
     }
 
 
-    /**
-     * Java utility draw
-     * @param m
-     * @param name
-     */
-    public static void draw(Mat m, String name){
-        int type = BufferedImage.TYPE_BYTE_GRAY;
-        if ( m.channels() > 1 ) {
-            Mat m2 = new Mat();
-            Imgproc.cvtColor(m,m2,Imgproc.COLOR_BGR2RGB);
-            type = BufferedImage.TYPE_3BYTE_BGR;
-            m = m2;
-        }
-        byte [] b = new byte[m.channels()*m.cols()*m.rows()];
-        m.get(0,0,b); // get all the pixels
-        BufferedImage image = new BufferedImage(m.cols(),m.rows(), type);
-        image.getRaster().setDataElements(0, 0, m.cols(),m.rows(), b);
-        JFrame frame = new JFrame();
-        frame.setTitle(name);
-        frame.getContentPane().setLayout(new FlowLayout());
-        frame.getContentPane().add(new JLabel(new ImageIcon(image)));
-        frame.pack();
-        frame.setVisible(true);
-    }
+
 
 }
 

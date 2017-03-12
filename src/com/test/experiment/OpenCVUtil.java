@@ -1,5 +1,7 @@
 package com.test.experiment;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.opencv.core.Core;
@@ -12,6 +14,8 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+
+import javax.swing.*;
 
 public class OpenCVUtil {
 
@@ -243,4 +247,30 @@ public class OpenCVUtil {
         img.put(0, 0, buffer);
     }
 
+
+
+    /**
+     * Java utility draw
+     * @param m
+     * @param name
+     */
+    public static void draw(Mat m, String name){
+        int type = BufferedImage.TYPE_BYTE_GRAY;
+        if ( m.channels() > 1 ) {
+            Mat m2 = new Mat();
+            Imgproc.cvtColor(m,m2,Imgproc.COLOR_BGR2RGB);
+            type = BufferedImage.TYPE_3BYTE_BGR;
+            m = m2;
+        }
+        byte [] b = new byte[m.channels()*m.cols()*m.rows()];
+        m.get(0,0,b); // get all the pixels
+        BufferedImage image = new BufferedImage(m.cols(),m.rows(), type);
+        image.getRaster().setDataElements(0, 0, m.cols(),m.rows(), b);
+        JFrame frame = new JFrame();
+        frame.setTitle(name);
+        frame.getContentPane().setLayout(new FlowLayout());
+        frame.getContentPane().add(new JLabel(new ImageIcon(image)));
+        frame.pack();
+        frame.setVisible(true);
+    }
 }
