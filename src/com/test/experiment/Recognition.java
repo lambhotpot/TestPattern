@@ -56,18 +56,20 @@ public class Recognition {
 
         LinkedList<MatOfDMatch> dmatchesListOfMat = new LinkedList<>();
         matcher.knnMatch(descriptros1,descriptros2, dmatchesListOfMat,2);
-
+        LinkedList<MatOfDMatch> good = new LinkedList<>();
         System.out.println("All Matched Size" + dmatchesListOfMat.size());
         LinkedList<DMatch> good_matchesList = new LinkedList<>();
         for (int matchIndx = 0; matchIndx < dmatchesListOfMat.size() ; matchIndx++) {
             double ratio = 0.8;
             if (dmatchesListOfMat.get(matchIndx).toArray()[0].distance  < ratio * dmatchesListOfMat.get(matchIndx).toArray()[1].distance) {
                 good_matchesList.addLast(dmatchesListOfMat.get(matchIndx).toArray()[0]);
+                good.add(dmatchesListOfMat.get(matchIndx));
             }
         }
 
         System.out.println("Good Match Size" + good_matchesList.size());
-        Features2d.drawMatches(image1,keypoints1,image2,keypoints2,dmatchesListOfMat.get(1),output);
+
+        Features2d.drawMatchesKnn(image1,keypoints1,image2,keypoints2,good,output);
         OpenCVUtil.draw(output,"Map");
 
     }
