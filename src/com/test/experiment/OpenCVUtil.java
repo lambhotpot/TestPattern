@@ -4,15 +4,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfInt;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.*;
 import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import javax.swing.*;
@@ -273,4 +266,16 @@ public class OpenCVUtil {
         frame.pack();
         frame.setVisible(true);
     }
+
+
+    public static double eudistance(int x1, int y1,int x2,int y2){
+
+        return Math.sqrt(  Math.pow( (x1 - x2),2) + Math.pow( (y1 - y2),2));
+
+    }
+
+
+
+
+
 }

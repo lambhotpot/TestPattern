@@ -21,7 +21,7 @@ public class Recognition {
          * Experiment on comone ORB feature matching
          */
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat image1 = Imgcodecs.imread("src/resources/data/standard2/p3.jpg");
+        Mat image1 = Imgcodecs.imread("src/resources/data/standard2/p5.jpg");
         Mat image2 = Imgcodecs.imread("src/resources/data/standard2/p5.jpg");
         //Mat image1 = Imgcodecs.imread("src/resources/data/standard/circles-six.jpg");
         //Mat image2 = Imgcodecs.imread("src/resources/data/standard/wan-four.jpg");
@@ -71,6 +71,8 @@ public class Recognition {
 
         Features2d.drawMatchesKnn(image1,keypoints1,image2,keypoints2,good,output);
         OpenCVUtil.draw(output,"Map");
+
+
 
     }
 

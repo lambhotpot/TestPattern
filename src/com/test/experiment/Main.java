@@ -6,8 +6,10 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-       // Experiment.process();
-        Recognition.process();
+        //Experiment.process();
+        //Recognition.process();
+
+        SimpleBlob.process();
 
     }
 
