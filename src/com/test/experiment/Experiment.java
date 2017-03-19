@@ -146,9 +146,9 @@ public class Experiment {
             double area = Imgproc.contourArea(approx);
 
             approx.convertTo(approxPoint, CvType.CV_32S);
-            if (area <4000 && area >50)
+            if (/*area <4000 && area >50)*/
             /*approx.toArray().length==4 && */
-                    /*area > 4000 && area < 10000)*/
+                    area > 4000 && area < 10000)
             {
                 System.out.println(area);
                 rois.add(approxPoint);
@@ -164,15 +164,13 @@ public class Experiment {
         Mat temp = src.clone();
         System.out.println(rois.size());
         for (MatOfPoint tile : rois) {
-            Imgproc.drawContours(temp,rois,index,new Scalar(0, 0, 255));
+            //Imgproc.drawContours(temp,rois,index,new Scalar(0, 0, 255));
 
             Rect rect = Imgproc.boundingRect(tile);
 
-
-
             rectangles.add(rect);
             //Draw rectangle
-            //Imgproc.rectangle(temp, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 255, 0), 3);
+            Imgproc.rectangle(temp, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 255, 0), 3);
 
             index++;
         }

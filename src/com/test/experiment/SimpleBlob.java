@@ -16,7 +16,9 @@ import org.opencv.imgproc.Imgproc;
  */
 public class SimpleBlob {
 
-    //TODO: Java blob parameters in a file
+    //TODO: Java blob parameters in a file: blob by area
+
+    //TODO: blob analysis, fill the holes
 
     public static  void processImage(Mat image1){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
