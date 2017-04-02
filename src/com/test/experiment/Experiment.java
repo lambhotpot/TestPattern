@@ -28,7 +28,7 @@ public class Experiment {
         Mat canny = new Mat();
 
         Mat lines = new Mat();
-        Mat closed = new Mat();
+        Mat output = new Mat();
 
 
         /**
@@ -120,6 +120,10 @@ public class Experiment {
 
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Imgproc.findContours(greyed, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
+
+        Imgproc.drawContours(src,contours,-1, new Scalar(0,255,0),1);
+        OpenCVUtil.draw(src, "coutour");
+
 
         List<MatOfPoint> hulls = new ArrayList<MatOfPoint>();
         List<MatOfPoint> rois = new ArrayList<MatOfPoint>();

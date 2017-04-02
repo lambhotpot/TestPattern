@@ -23,7 +23,7 @@ public class SimpleBlob {
     public static  void processImage(Mat image1){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Mat output = new Mat();
-
+        image1 = Imgcodecs.imread("src/resources/data/standard/circles-three.jpg");
 
 
         Imgproc.cvtColor(image1, image1, Imgproc.COLOR_RGB2GRAY);
@@ -49,22 +49,22 @@ public class SimpleBlob {
          */
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        Mat image1 = Imgcodecs.imread("src/resources/data/standard/wan-three.jpg");
+        Mat image1 = Imgcodecs.imread("src/resources/data/standard/sticks-three.jpg");
         Imgproc.resize(image1, image1, new Size(image1.width()*0.2,image1.height()*0.2));
         System.out.println(image1.width()+" height: "+image1.height());
         Mat output = new Mat();
 
-
-
         Imgproc.cvtColor(image1, image1, Imgproc.COLOR_RGB2GRAY);
         Imgproc.GaussianBlur(image1, image1, new Size(5, 5), 0);
-        //Imgproc.adaptiveThreshold(image1,image1,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,11,2);
+        Imgproc.adaptiveThreshold(image1,image1,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,11,2);
 
         FeatureDetector detector = FeatureDetector.create(FeatureDetector.SIMPLEBLOB);
+        detector.read("src/resources/config/simpleBlob.xml");
+        //detector.write("src/resources/config/simpleBlob.xml");
 
         MatOfKeyPoint keypoints = new MatOfKeyPoint();
-
         detector.detect(image1,keypoints);
+
 
         Features2d.drawKeypoints(image1,keypoints,output);
         System.out.println("Number of blobs: "+ keypoints.size());
