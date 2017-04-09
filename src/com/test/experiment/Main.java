@@ -5,11 +5,11 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-
         //Experiment.process();
-       // Recognition.process();
+       WanDetector.process();
+       Recognition.process();
        // DominateColor.process();
-        SimpleBlob.process();
+        //SimpleBlob.process();
        /// SimpleBlob.processImage(null);
     }
 

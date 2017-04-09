@@ -21,13 +21,14 @@ public class Recognition {
          * Experiment on comone ORB feature matching
          */
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat image1 = Imgcodecs.imread("src/resources/data/standard/circles-five.jpg");
-        Mat image2 = Imgcodecs.imread("src/resources/data/standard/circles-seven.jpg");
-        //Mat image1 = Imgcodecs.imread("src/resources/data/standard/circles-six.jpg");
-        //Mat image2 = Imgcodecs.imread("src/resources/data/standard/wan-four.jpg");
-        Imgproc.resize(image1, image1, new Size(image1.width()*0.2,image1.height()*0.2));
-        Imgproc.resize(image2, image2, new Size(image1.width(),image1.height()));
+       // Mat image1 = Imgcodecs.imread("src/resources/data/standard/circles-five.jpg");
 
+        Mat image1 = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
+        Mat image2 = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
+       // Mat image2 = Imgcodecs.imread("src/resources/data/standard/wan-one.jpg");
+
+
+       Imgproc.resize(image2, image2, new Size(image1.width(),image1.height()));
 
 
         Mat output = new Mat();
