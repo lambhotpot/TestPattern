@@ -23,14 +23,16 @@ public class SimpleBlob {
     public static  void processImage(Mat image1){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Mat output = new Mat();
-        image1 = Imgcodecs.imread("src/resources/data/standard/circles-three.jpg");
+        // image1 = Imgcodecs.imread("src/resources/data/standard/circles-three.jpg");
 
 
-        Imgproc.cvtColor(image1, image1, Imgproc.COLOR_RGB2GRAY);
-        Imgproc.GaussianBlur(image1, image1, new Size(5, 5), 0);
+        //Imgproc.cvtColor(image1, image1, Imgproc.COLOR_RGB2GRAY);
+        //Imgproc.GaussianBlur(image1, image1, new Size(5, 5), 0);
         //Imgproc.adaptiveThreshold(image1,image1,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,11,2);
+        //Imgproc.Canny(image1, image1, 10, 30, 3, true);
 
         FeatureDetector detector = FeatureDetector.create(FeatureDetector.SIMPLEBLOB);
+        detector.read("src/resources/config/simpleBlob.xml");
 
         MatOfKeyPoint keypoints = new MatOfKeyPoint();
 

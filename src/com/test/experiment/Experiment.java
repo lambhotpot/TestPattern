@@ -19,7 +19,13 @@ public class Experiment {
         //Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple2.jpg");
         //Mat src = Imgcodecs.imread("src/resources/data/demo-images/scattered1.jpg");
         Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple3.jpg");
-        //Mat src = Imgcodecs.imread("src/resources/data/demo-images/bambu2.jpg");
+
+        Mat src2 = Imgcodecs.imread("src/resources/data/standard/circles-seven.jpg");
+        Mat src3 = Imgcodecs.imread("src/resources/data/standard/sticks-three.jpg");
+
+        Imgproc.resize(src3, src3, new Size(100, 100));
+        Imgproc.resize(src2, src2, new Size(100, 100));
+
         Mat greyed = new Mat();
         Mat blurred = new Mat();
         Mat resize = new Mat();
@@ -121,8 +127,8 @@ public class Experiment {
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Imgproc.findContours(greyed, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
 
-        Imgproc.drawContours(src,contours,-1, new Scalar(0,255,0),1);
-        OpenCVUtil.draw(src, "coutour");
+    /*    Imgproc.drawContours(src,contours,-1, new Scalar(0,255,0),1);
+        OpenCVUtil.draw(src, "coutour");*/
 
 
         List<MatOfPoint> hulls = new ArrayList<MatOfPoint>();
@@ -173,8 +179,11 @@ public class Experiment {
             Rect rect = Imgproc.boundingRect(tile);
 
             rectangles.add(rect);
-            //Draw rectangle
-            Imgproc.rectangle(temp, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 255, 0), 3);
+            //Draw rectangle , cut 10% content
+            double padding = 0.1;
+            int xpadding = (int) (rect.width * padding) ;
+            int ypadding = (int) (rect.height * padding) ;
+            Imgproc.rectangle(temp, new Point(rect.x + xpadding, rect.y-ypadding), new Point(rect.x + rect.width -xpadding, rect.y + rect.height-ypadding), new Scalar(0, 255, 0), 3);
 
             index++;
         }
@@ -191,17 +200,17 @@ public class Experiment {
             for (int j = 0; j < clone.size(); j++) {
                 Rect rect1 = clone.get(i);
                 Rect rect2 = clone.get(j);
-                System.out.println("distance: " + OpenCVUtil.eudistance(rect1.x, rect1.y, rect2.x, rect2.y));
-                System.out.println("distance : " + OpenCVUtil.eudistance(rect1.x, rect1.y, rect2.x, rect2.y));
+                //System.out.println("distance: " + OpenCVUtil.eudistance(rect1.x, rect1.y, rect2.x, rect2.y));
+                //System.out.println("distance : " + OpenCVUtil.eudistance(rect1.x, rect1.y, rect2.x, rect2.y));
                 //remove those rectangle that are too close to each other.
                 if (i < j && OpenCVUtil.eudistance(rect1.x, rect1.y, rect2.x, rect2.y) >= 0 &&
                         OpenCVUtil.eudistance(rect1.x, rect1.y, rect2.x, rect2.y) < 10
                         && OpenCVUtil.eudistance(rect1.x + rect1.width, rect1.y + rect1.height, rect2.x + rect2.width, rect2.y + rect2.height) < 10) {
-                    System.out.println("i " + i);
-                    System.out.println("j " + j);
-                    System.out.println("Can remove i");
+                    //System.out.println("i " + i);
+                   // System.out.println("j " + j);
+                   // System.out.println("Can remove i");
                     rectangles.remove(i);
-                    return;
+                    break;
                 }
             }
 
@@ -209,9 +218,7 @@ public class Experiment {
 
 
         System.out.println("Size After removal " + rectangles.size());
-
         //
-
         /**
          * Step: now get a list of sub mat
          */
@@ -221,22 +228,16 @@ public class Experiment {
             //sub mat from src orignal image after resizing:
             //width = 652 height: 489
             src.submat(rectangles.get(i)).copyTo(listOfTiles.get(i));
-            System.out.println("width = " + listOfTiles.get(i).width() + " height: " + listOfTiles.get(i).height());
-            //OpenCVUtil.draw(listOfTiles.get(i),"sub"+i);
-            //SimpleBlob.processImage(listOfTiles.get(i));
-
+            System.out.println("List of Tiles width = " + listOfTiles.get(i).width() + " height: " + listOfTiles.get(i).height());
+            SimpleBlob.processImage(listOfTiles.get(i));
 
         }
 
-        /**
-         * Step: Now can process each tiles individually
-         *
-         */
-        //TODO: loop through each tiles
-
-
-
-
+        System.out.println("single test1");
+        SimpleBlob.processImage(src2);
+        System.out.println("single test2");
+        System.out.println("List of Tiles width = " + src3.width() + " height: " + src3.height());
+        SimpleBlob.processImage(src3);
     }
 
 
