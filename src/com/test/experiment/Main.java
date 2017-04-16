@@ -5,10 +5,10 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Experiment.process();
+        //Experiment.process();
 
 
-        //WanDetector.process();
+        WanDetector.process();
         //Recognition.process();
         // DominateColor.process();
         //SimpleBlob.process();

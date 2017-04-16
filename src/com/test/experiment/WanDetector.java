@@ -3,6 +3,7 @@ package com.test.experiment;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -17,9 +18,9 @@ public class WanDetector {
     public static void process(){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         //Mat src = Imgcodecs.imread("src/resources/data/standard3/6wan.png");
-       // Mat src = Imgcodecs.imread("src/resources/data/standard/circles-nine.jpg");
-        Mat src = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
-
+        Mat src = Imgcodecs.imread("src/resources/data/standard/circles-nine.jpg");
+        //Mat src = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
+        //Imgproc.resize(src, src, new Size(100, 100));
         Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2HSV);
         List<Mat> channels = new ArrayList<>();
         Core.split(src,channels);
@@ -50,10 +51,10 @@ public class WanDetector {
         Mat maskGreen = new Mat();
 
         // for black
-        Core.inRange(src, new Scalar(0, 0, 0, 0),new Scalar(180, 255, 30, 0), maskBlack);
+        Core.inRange(src, new Scalar(0, 0, 0),new Scalar(180, 255, 38), maskBlack);
 
         // for white
-        Core.inRange(src, new Scalar(0, 0, 200, 0), new Scalar(180, 255, 255, 0), maskWhitle);
+        Core.inRange(src, new Scalar(0, 0, 200), new Scalar(180, 255, 255), maskWhitle);
 
 
 
@@ -72,14 +73,15 @@ public class WanDetector {
         OpenCVUtil.draw(maskBlue, "blue");
 
         //for green
-        Core.inRange(src, new Scalar(30, 100, 100), new Scalar(90, 255, 255), maskGreen);
+        Core.inRange(src, new Scalar(30, 30, 100), new Scalar(80, 255, 255), maskGreen);
         double green_percent = (((double) Core.countNonZero(maskGreen))*100)/image_size;
         System.out.println("green_percent:" + green_percent);
         OpenCVUtil.draw(maskGreen, "green");
 
-        // sensitivity is a int, typically set to 15 - 20
-        //[60 - sensitivity, 100, 100]
-        //[60 + sensitivity, 255, 255]
+        Mat maskGreenBlue = new Mat();
+
+        Core.bitwise_or(maskGreen, maskBlue,maskGreenBlue);
+        OpenCVUtil.draw(maskGreenBlue, "green blue");
 
     }
 
