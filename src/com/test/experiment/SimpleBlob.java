@@ -1,5 +1,6 @@
 package com.test.experiment;
 
+import com.test.domain.MahjongParameters;
 import com.test.util.OpenCVUtil;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -8,6 +9,7 @@ import org.opencv.core.Size;
 import org.opencv.features2d.FeatureDetector;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.CLAHE;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -50,7 +52,7 @@ public class SimpleBlob {
          */
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        Mat image1 = Imgcodecs.imread("src/resources/data/demo_photo_std1_chopped/tiao6.png");
+        Mat image1 = Imgcodecs.imread("src/resources/tileLibrary/demo_photo_std1_chopped/tong6.png");
         Imgproc.resize(image1, image1, new Size(100,150));
         System.out.println(image1.width()+" height: "+image1.height());
         Mat output = new Mat();
@@ -58,6 +60,8 @@ public class SimpleBlob {
         //Imgproc.cvtColor(image1, image1, Imgproc.COLOR_RGB2GRAY);
         //Imgproc.GaussianBlur(image1, image1, new Size(7, 7), 0);
         //Imgproc.adaptiveThreshold(image1,image1,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,11,2);*/
+        /*CLAHE clahe = Imgproc.createCLAHE(MahjongParameters.CLAHEClipLimit, new Size(MahjongParameters.CLAHEPixel, MahjongParameters.CLAHEPixel));
+        clahe.apply(image1, image1);*/
 
 
         FeatureDetector detector = FeatureDetector.create(FeatureDetector.SIMPLEBLOB);

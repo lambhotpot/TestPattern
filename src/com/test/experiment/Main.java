@@ -10,18 +10,19 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-       //Experiment.process();
-
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        Experiment.process();
 
         //WanDetector.process();
-        Recognition.process(null);
+        //Recognition.process();
         // DominateColor.process();
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat test = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tiao_1-9.png");
 
-        MahjongTileProcessor analyser = new MahjongTileProcessor(9);
+        Mat test = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tong_1-9.png");
 
+        //MahjongTileProcessor analyser = new MahjongTileProcessor(9);
         //analyser.process(test);
+
+
         //SimpleBlob.process();
 
 

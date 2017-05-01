@@ -55,6 +55,8 @@ public class MahjongTileProcessor {
 
     private MahjongTileAnalyseResult analyseTile(Mat tile) {
         //TODO: complete this
+
+
         MahjongTileAnalyseResult result = new MahjongTileAnalyseResult();
         analyseSimpleBlob(tile, result);
         //color
@@ -68,7 +70,7 @@ public class MahjongTileProcessor {
     private void analysePattern(Mat tile, MahjongTileAnalyseResult result) {
         //Read library file:
         //TODO: introduce multiple libraries for scoring
-        File folder = new File("src/resources/data/demo_photo_std1_chopped");
+        File folder = new File("src/resources/tileLibrary/demo_photo_std1_chopped");
         File[] listOfFiles = folder.listFiles();
 
         //for each lib image from one set of tiles calculate
@@ -80,7 +82,7 @@ public class MahjongTileProcessor {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                compareTileWithLibImage(tile, libImage);
+                final double pctScore = compareTileWithLibImage(tile, libImage);
             }
         }
 
@@ -113,7 +115,7 @@ public class MahjongTileProcessor {
         LinkedList<MatOfDMatch> dmatchesListOfMat = new LinkedList<>();
         matcher.knnMatch(descriptrosTile, descriptrosLib, dmatchesListOfMat, 2);
         LinkedList<MatOfDMatch> good = new LinkedList<>();
-        System.out.println("All Matched Size without Ratio Test: " + dmatchesListOfMat.size());
+        //System.out.println("All Matched Size without Ratio Test: " + dmatchesListOfMat.size());
         LinkedList<DMatch> good_matchesList = new LinkedList<>();
         for (int matchIndx = 0; matchIndx < dmatchesListOfMat.size(); matchIndx++) {
             double ratio = MahjongParameters.knn_ratio;
@@ -125,8 +127,8 @@ public class MahjongTileProcessor {
 
         double goodMatch = good_matchesList.size();
         double libTotalKeyPoints = keypointsLib.size().height;
-        double matchPercentage = goodMatch / libTotalKeyPoints;
-        System.out.println("Good Match size: " + goodMatch);
+        double matchPercentage = goodMatch * 100 / libTotalKeyPoints;
+        //System.out.println("Good Match size: " + goodMatch);
         //Features2d.drawMatchesKnn(tile,keypointsTile,libImage,keypointsLib,good,output);
         System.out.println("Good Match Percentage: " + matchPercentage);
         return matchPercentage;
@@ -139,7 +141,6 @@ public class MahjongTileProcessor {
         result.setRedPercentage(fullTileColor[0]);
         result.setBlackPercentage(fullTileColor[1]);
         result.setBlueGreenPercentage(fullTileColor[2]);
-
         //TODO: need to detect bottom half top half color too
         //Mat croppedFrame = frame(Rect(0, frame.rows/2, frame.cols, frame.rows/2));
 
@@ -182,7 +183,6 @@ public class MahjongTileProcessor {
         Core.inRange(colorMask, new Scalar(220 / 2, 50, 50), new Scalar(260 / 2, 255, 255), maskBlue);
         double blue_percent = (((double) Core.countNonZero(maskBlue)) * 100) / image_size;
 
-
         //for green
         Core.inRange(colorMask, new Scalar(30, 30, 100), new Scalar(80, 255, 255), maskGreen);
         double green_percent = (((double) Core.countNonZero(maskGreen)) * 100) / image_size;
@@ -202,10 +202,8 @@ public class MahjongTileProcessor {
         detector.detect(tile, keyPoints);
         int numberOfObjects = (int) keyPoints.size().height;
         result.setNumberOfObjects(numberOfObjects);
+        OpenCVUtil.draw(tile, String.valueOf(numberOfObjects));
 
-         /*Mat testClone= tile.clone();
-         Features2d.drawKeypoints(testClone,keypoints,testClone);
-         OpenCVUtil.draw(testClone,String.valueOf( keypoints.size().height));*/
     }
 
     private ArrayList<Mat> findContours(Mat orig, Mat copy) {

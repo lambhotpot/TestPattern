@@ -18,7 +18,7 @@ import java.util.LinkedList;
  */
 public class Recognition {
 
-    public static void process(Mat image1) throws IOException {
+    public static void process() throws IOException {
 
         /**
          * Experiment on comone ORB feature matching
@@ -26,8 +26,8 @@ public class Recognition {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
        // Mat image1 = Imgcodecs.imread("src/resources/data/standard/circles-five.jpg");
 
-        image1 = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
-        File folder = new File("src/resources/data/demo_photo_std1_chopped");
+        Mat image1 = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
+        File folder = new File("src/resources/tileLibrary/demo_photo_std1_chopped");
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
             if (file.isFile()) {
@@ -39,7 +39,7 @@ public class Recognition {
     }
 
     private static void processImage(Mat image1, String fileName ) {
-        System.out.println("standard library... "+fileName);
+        System.out.println("standard library... " +fileName);
 
 
         Mat image2 = Imgcodecs.imread(fileName);

@@ -22,7 +22,7 @@ public class Experiment {
 
         //Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple3.jpg");
 
-        Mat src = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/wan_1-9.png");
+        Mat src = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tiao_1-9.png");
 
         Mat src2 = Imgcodecs.imread("src/resources/data/standard/circles-seven.jpg");
         Mat src3 = Imgcodecs.imread("src/resources/data/standard/sticks-three.jpg");
@@ -223,7 +223,7 @@ public class Experiment {
 
             rectangles.add(rect);
             //Draw rectangle , cut 10% content
-            double padding = 0.01;
+            double padding = 0.05;
             int xpadding = (int) (rect.width * padding);
             int ypadding = (int) (rect.height * padding);
             Imgproc.rectangle(temp, new Point(rect.x + xpadding, rect.y - ypadding), new Point(rect.x + rect.width - xpadding, rect.y + rect.height - ypadding), new Scalar(0, 255, 0), 3);
@@ -272,10 +272,10 @@ public class Experiment {
             //sub mat from src orignal image after resizing:
             //width = 652 height: 489
             src.submat(rectangles.get(i)).copyTo(listOfTiles.get(i));
-            OpenCVUtil.draw(listOfTiles.get(i), "tile:" + i);
+            //OpenCVUtil.draw(listOfTiles.get(i), "tile:" + i);
             //System.out.println("List of Tiles width = " + listOfTiles.get(i).width() + " height: " + listOfTiles.get(i).height());
 
-            // SimpleBlob.processImage(listOfTiles.get(i));
+            SimpleBlob.processImage(listOfTiles.get(i));
             //System.out.println("Source " + i);
             //Recognition.process(listOfTiles.get(i));
 
