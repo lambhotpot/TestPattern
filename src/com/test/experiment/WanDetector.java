@@ -10,9 +10,7 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Lotti on 09/04/2017.
- */
+
 public class WanDetector {
 
     public static void process(){

@@ -1,5 +1,6 @@
 package com.test.experiment;
 
+import com.test.domain.MahjongParameters;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
@@ -9,6 +10,7 @@ import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.CLAHE;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -40,7 +42,7 @@ public class SimpleBlob {
 
         Features2d.drawKeypoints(image1,keypoints,output);
         System.out.println("Number of blobs: "+ keypoints.size());
-        OpenCVUtil.draw(output,"Map");
+        OpenCVUtil.draw(output, String.valueOf(keypoints.size().height));
     }
 
 
@@ -51,14 +53,15 @@ public class SimpleBlob {
          */
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        Mat image1 = Imgcodecs.imread("src/resources/data/standard/sticks-three.jpg");
-        Imgproc.resize(image1, image1, new Size(image1.width()*0.2,image1.height()*0.2));
+        Mat image1 = Imgcodecs.imread("src/resources/data/demo_photo_std1_chopped/tiao6.png");
+        Imgproc.resize(image1, image1, new Size(100,150));
         System.out.println(image1.width()+" height: "+image1.height());
         Mat output = new Mat();
 
-        Imgproc.cvtColor(image1, image1, Imgproc.COLOR_RGB2GRAY);
-        Imgproc.GaussianBlur(image1, image1, new Size(5, 5), 0);
-        Imgproc.adaptiveThreshold(image1,image1,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,11,2);
+        //Imgproc.cvtColor(image1, image1, Imgproc.COLOR_RGB2GRAY);
+        //Imgproc.GaussianBlur(image1, image1, new Size(7, 7), 0);
+        //Imgproc.adaptiveThreshold(image1,image1,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,11,2);*/
+
 
         FeatureDetector detector = FeatureDetector.create(FeatureDetector.SIMPLEBLOB);
         detector.read("src/resources/config/simpleBlob.xml");

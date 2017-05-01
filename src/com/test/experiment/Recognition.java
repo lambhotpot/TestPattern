@@ -8,6 +8,11 @@ import org.opencv.features2d.Features2d;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 
 /**
@@ -17,7 +22,7 @@ public class Recognition {
 
 
 
-    public static void process(){
+    public static void process(Mat image1) throws IOException {
 
         /**
          * Experiment on comone ORB feature matching
@@ -25,13 +30,33 @@ public class Recognition {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
        // Mat image1 = Imgcodecs.imread("src/resources/data/standard/circles-five.jpg");
 
-        Mat image1 = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
-        Mat image2 = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
-       // Mat image2 = Imgcodecs.imread("src/resources/data/standard/wan-one.jpg");
+        image1 = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
 
 
-       Imgproc.resize(image2, image2, new Size(image1.width(),image1.height()));
 
+        File folder = new File("src/resources/data/demo_photo_std1_chopped");
+        File[] listOfFiles = folder.listFiles();
+
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                processImage(image1,file.getCanonicalFile().toString());
+            }
+        }
+
+
+
+
+
+
+    }
+
+    private static void processImage(Mat image1, String fileName ) {
+        System.out.println("standard library... "+fileName);
+
+
+        Mat image2 = Imgcodecs.imread(fileName);
+        Imgproc.resize(image1, image1, new Size(100,100));
+        Imgproc.resize(image2, image2, new Size(100,100));
 
         Mat output = new Mat();
         FeatureDetector detector = FeatureDetector.create(FeatureDetector.ORB);
@@ -43,8 +68,10 @@ public class Recognition {
         detector.detect(image2, keypoints2);
 
 
-        System.out.println("K1 Size: " + keypoints1.size());
-        System.out.println("K2 Size: " + keypoints2.size());
+        //System.out.println("K1 Size: " + keypoints1.size());
+        //System.out.println("K2 Size: " + keypoints2.size());
+
+
         Mat descriptros1 = new Mat();
         Mat descriptros2 = new Mat();
         extractor.compute(image1,keypoints1,descriptros1);
@@ -70,10 +97,18 @@ public class Recognition {
             }
         }
 
-        System.out.println("Good Match Size" + good_matchesList.size());
+       // System.out.println("Good Match Size" + good_matchesList.size());
+        double a = good_matchesList.size();
+        double b = keypoints2.size().height;
+        System.out.println("Good Match size: " + a);
+        //System.out.println("K2: " + b);
+        if(a/b>0.1){
+            Features2d.drawMatchesKnn(image1,keypoints1,image2,keypoints2,good,output);
+            String ab = String.valueOf(a/b);
+            OpenCVUtil.draw(output, ab);
+            System.out.println("Good Match Percentage: " + a/b);
+        }
 
-        Features2d.drawMatchesKnn(image1,keypoints1,image2,keypoints2,good,output);
-        OpenCVUtil.draw(output,"Map");
 
 
 
