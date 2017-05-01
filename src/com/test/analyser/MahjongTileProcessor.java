@@ -291,6 +291,8 @@ public class MahjongTileProcessor {
         //convert color to grey scale
         Imgproc.cvtColor(clone, clone, Imgproc.COLOR_RGB2GRAY);
 
+        //TODO: consider adjust histogram for brightness
+
         //ClAHE is used to adjust contrast to help with clear edging
 
         CLAHE clahe = Imgproc.createCLAHE(MahjongParameters.CLAHEClipLimit, new Size(MahjongParameters.CLAHEPixel, MahjongParameters.CLAHEPixel));

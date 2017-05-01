@@ -6,7 +6,7 @@
     <minThreshold>10</minThreshold>
     <maxThreshold>250</maxThreshold>
     <minRepeatability>2</minRepeatability>
-    <minDistBetweenBlobs>5</minDistBetweenBlobs>
+    <minDistBetweenBlobs>1</minDistBetweenBlobs>
     <filterByColor>0</filterByColor>
     <blobColor>0</blobColor>
     <filterByArea>1</filterByArea>

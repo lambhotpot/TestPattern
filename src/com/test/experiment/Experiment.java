@@ -22,7 +22,7 @@ public class Experiment {
 
         //Mat src = Imgcodecs.imread("src/resources/data/demo-images/multiple3.jpg");
 
-        Mat src = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tiao_1-9.png");
+        Mat src = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tong_1-9.png");
 
         Mat src2 = Imgcodecs.imread("src/resources/data/standard/circles-seven.jpg");
         Mat src3 = Imgcodecs.imread("src/resources/data/standard/sticks-three.jpg");
