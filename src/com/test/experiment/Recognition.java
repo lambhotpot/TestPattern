@@ -1,5 +1,6 @@
 package com.test.experiment;
 
+import com.test.util.OpenCVUtil;
 import org.opencv.core.*;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
@@ -10,17 +11,12 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 
 /**
  * Created by Lotti on 12/03/2017.
  */
 public class Recognition {
-
-
 
     public static void process(Mat image1) throws IOException {
 
@@ -31,21 +27,13 @@ public class Recognition {
        // Mat image1 = Imgcodecs.imread("src/resources/data/standard/circles-five.jpg");
 
         image1 = Imgcodecs.imread("src/resources/data/demo-images/1wan.jpg");
-
-
-
         File folder = new File("src/resources/data/demo_photo_std1_chopped");
         File[] listOfFiles = folder.listFiles();
-
         for (File file : listOfFiles) {
             if (file.isFile()) {
                 processImage(image1,file.getCanonicalFile().toString());
             }
         }
-
-
-
-
 
 
     }
@@ -55,8 +43,8 @@ public class Recognition {
 
 
         Mat image2 = Imgcodecs.imread(fileName);
-        Imgproc.resize(image1, image1, new Size(100,100));
-        Imgproc.resize(image2, image2, new Size(100,100));
+        Imgproc.resize(image1, image1, new Size(100,150));
+        Imgproc.resize(image2, image2, new Size(100,150));
 
         Mat output = new Mat();
         FeatureDetector detector = FeatureDetector.create(FeatureDetector.ORB);

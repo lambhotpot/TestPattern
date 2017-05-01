@@ -1,11 +1,8 @@
 package com.test.domain;
 
-/**
- * Created by Lotti on 01/05/2017.
- */
+
 public class MahjongTileAnalyseResult {
     private int numberOfObjects = 0;
-
     private double redPercentage = 0;
     private double blueGreenPercentage = 0;
     private double blackPercentage = 0;
@@ -44,6 +41,19 @@ public class MahjongTileAnalyseResult {
         this.numberOfObjects = numberOfObjects;
     }
 
+    public int getDominantColor(){
+        if (redPercentage > blackPercentage && redPercentage > blueGreenPercentage){
+            return MahjongParameters.RED;
+        }
+        if (blackPercentage > redPercentage && blackPercentage > blueGreenPercentage){
+            return MahjongParameters.BLACK;
+        }
+        if (blueGreenPercentage > redPercentage && blueGreenPercentage > blackPercentage){
+            return MahjongParameters.GREEN;
+        }
+        //return invalid
+        return MahjongParameters.INVALID_COLOR ;
+    }
 
     @Override
     public String toString() {

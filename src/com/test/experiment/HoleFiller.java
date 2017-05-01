@@ -1,5 +1,6 @@
 package com.test.experiment;
 
+import com.test.util.OpenCVUtil;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Scalar;

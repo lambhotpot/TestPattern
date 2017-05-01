@@ -39,9 +39,9 @@ public enum MahjongParameters {
      * canny
      */
 
-    public static int cannyLowerThresh = 10 ;
-    public static int cannyUpperThresh = 30 ;
-    public static int cannyApertureSize = 3 ;
+    public static final int cannyLowerThresh = 10 ;
+    public static final int cannyUpperThresh = 30 ;
+    public static final int cannyApertureSize = 3 ;
 
 
     /**
@@ -49,4 +49,11 @@ public enum MahjongParameters {
      */
     public static double knn_ratio = 0.8;
 
+    /**
+     * color
+     */
+    public static final  int INVALID_COLOR = -1;
+    public static final  int RED = 1;
+    public static final int GREEN = 2;
+    public static final  int BLACK = 3;
 }

@@ -1,5 +1,6 @@
 package com.test.experiment;
 
+import com.test.util.OpenCVUtil;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.CLAHE;

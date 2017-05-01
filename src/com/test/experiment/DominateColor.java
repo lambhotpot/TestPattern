@@ -1,5 +1,6 @@
 package com.test.experiment;
 
+import com.test.util.OpenCVUtil;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -9,7 +10,6 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 
 public class DominateColor {

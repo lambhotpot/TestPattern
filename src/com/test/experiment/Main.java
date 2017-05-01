@@ -1,6 +1,6 @@
 package com.test.experiment;
 
-import com.test.analyser.MahjongTileAnalyser;
+import com.test.analyser.MahjongTileProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -19,7 +19,7 @@ public class Main {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Mat test = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tiao_1-9.png");
 
-        MahjongTileAnalyser analyser = new MahjongTileAnalyser(9);
+        MahjongTileProcessor analyser = new MahjongTileProcessor(9);
 
         //analyser.process(test);
         //SimpleBlob.process();

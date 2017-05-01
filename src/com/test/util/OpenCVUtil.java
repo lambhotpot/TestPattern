@@ -1,4 +1,4 @@
-package com.test.experiment;
+package com.test.util;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -269,7 +269,6 @@ public class OpenCVUtil {
 
 
     public static double eudistance(int x1, int y1,int x2,int y2){
-
         return Math.sqrt(  Math.pow( (x1 - x2),2) + Math.pow( (y1 - y2),2));
 
     }
