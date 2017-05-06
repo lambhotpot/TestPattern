@@ -18,10 +18,15 @@ public class Main {
         //Recognition.process();
         //DominateColor.process();
 
-        Mat test = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/wan_1-9.png");
+        Mat test = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tong_1-9.png");
+        Mat test2 = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tiao_1-9.png");
+        Mat test3 = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/wan_1-9.png");
 
         MahjongTileProcessor analyser = new MahjongTileProcessor(9);
         analyser.process(test);
+        analyser.process(test2);
+        analyser.process(test3);
+
 
 
         //SimpleBlob.process();

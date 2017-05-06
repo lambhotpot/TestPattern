@@ -136,7 +136,7 @@ public class MahjongTileProcessor {
         double matchPercentage = goodMatch * 100 / libTotalKeyPoints;
         //System.out.println("Good Match size: " + goodMatch);
         Features2d.drawMatchesKnn(tile,keypointsTile,libImage,keypointsLib,good,output);
-        if(matchPercentage>50)
+        if(matchPercentage>10)
         OpenCVUtil.draw(output, String.valueOf(matchPercentage));
         //System.out.println("Good Match Percentage: " + matchPercentage);
         return matchPercentage;
