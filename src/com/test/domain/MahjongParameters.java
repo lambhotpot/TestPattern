@@ -47,7 +47,7 @@ public enum MahjongParameters {
     /**
      * knn ratio test
      */
-    public static double knn_ratio = 0.8;
+    public static double knn_ratio = 0.7;
 
     /**
      * color
