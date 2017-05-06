@@ -24,7 +24,7 @@ public enum MahjongParameters {
     public static double contourPolyEpsilon = 0.02 ;
 
     /**
-     * CLAHE Parameters: increase contrast for better edging
+     * CLAHE Parameters: equalise histogram for better edging
      */
     public static final int CLAHEPixel = 1;
     public static final int CLAHEClipLimit = 4;
@@ -56,4 +56,12 @@ public enum MahjongParameters {
     public static final  int RED = 1;
     public static final int GREEN = 2;
     public static final  int BLACK = 3;
+
+
+    /**
+     * Library Location:
+     */
+     public static final String libPath = "src/resources/tileLibrary";
+
+
 }

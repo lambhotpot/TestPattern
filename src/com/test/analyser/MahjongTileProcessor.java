@@ -7,16 +7,14 @@ import org.opencv.core.*;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
+import org.opencv.features2d.Features2d;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.CLAHE;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 
 public class MahjongTileProcessor {
@@ -37,7 +35,7 @@ public class MahjongTileProcessor {
 
         ArrayList<Mat> tiles = findContours(orig, clone);
 
-        //for each tile
+        //for each tile analyse the tile
         ArrayList<MahjongTileAnalyseResult> results = new ArrayList<>();
         for (Mat tile : tiles) {
             results.add(analyseTile(tile));
@@ -56,35 +54,43 @@ public class MahjongTileProcessor {
     private MahjongTileAnalyseResult analyseTile(Mat tile) {
         //TODO: complete this
 
-
+        //One result object per tile
         MahjongTileAnalyseResult result = new MahjongTileAnalyseResult();
+        //simple blob
         analyseSimpleBlob(tile, result);
         //color
         analyseColor(tile, result);
         //ORB extraction
         analysePattern(tile, result);
+        //show the result object after all processing
         System.out.println(result.toString());
+        //return the result object
         return result;
     }
 
     private void analysePattern(Mat tile, MahjongTileAnalyseResult result) {
         //Read library file:
-        //TODO: introduce multiple libraries for scoring
-        File folder = new File("src/resources/tileLibrary/demo_photo_std1_chopped");
-        File[] listOfFiles = folder.listFiles();
-
-        //for each lib image from one set of tiles calculate
-        for (File file : listOfFiles) {
-            if (file.isFile()) {
-                Mat libImage = null;
-                try {
-                    libImage = Imgcodecs.imread(file.getCanonicalFile().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
+        Set<String> libraryPaths = result.getLibraryPaths();
+        for(String libraryPath:libraryPaths){
+            File tileFolder = new File(libraryPath);
+            File[] listOfLibTiles = tileFolder.listFiles();
+            for (File libraryImageFile:listOfLibTiles
+                    ) {
+                if (libraryImageFile.isFile()) {
+                    Mat libImageMat = null;
+                    try {
+                        libImageMat = Imgcodecs.imread(libraryImageFile.getCanonicalFile().toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    final double pctScore = compareTileWithLibImage(tile, libImageMat);
+                    //Add Matching Score
+                    result.setScoreForLibrary(libraryPath,libraryImageFile.getName(),pctScore);
                 }
-                final double pctScore = compareTileWithLibImage(tile, libImage);
             }
         }
+
+
 
     }
 
@@ -129,8 +135,10 @@ public class MahjongTileProcessor {
         double libTotalKeyPoints = keypointsLib.size().height;
         double matchPercentage = goodMatch * 100 / libTotalKeyPoints;
         //System.out.println("Good Match size: " + goodMatch);
-        //Features2d.drawMatchesKnn(tile,keypointsTile,libImage,keypointsLib,good,output);
-        System.out.println("Good Match Percentage: " + matchPercentage);
+        Features2d.drawMatchesKnn(tile,keypointsTile,libImage,keypointsLib,good,output);
+        if(matchPercentage>50)
+        OpenCVUtil.draw(output, String.valueOf(matchPercentage));
+        //System.out.println("Good Match Percentage: " + matchPercentage);
         return matchPercentage;
     }
 
@@ -175,7 +183,7 @@ public class MahjongTileProcessor {
         // for black
         Core.inRange(colorMask, new Scalar(0, 0, 0), new Scalar(180, 255, 38), maskBlack);
         double black_percent = (((double) Core.countNonZero(maskBlack)) * 100) / image_size;
-        System.out.println("Tile Black Percentage: " + black_percent);
+        //System.out.println("Tile Black Percentage: " + black_percent);
         result[1] = (black_percent);
 
 
@@ -202,7 +210,7 @@ public class MahjongTileProcessor {
         detector.detect(tile, keyPoints);
         int numberOfObjects = (int) keyPoints.size().height;
         result.setNumberOfObjects(numberOfObjects);
-        OpenCVUtil.draw(tile, String.valueOf(numberOfObjects));
+        //OpenCVUtil.draw(tile, String.valueOf(numberOfObjects));
 
     }
 
@@ -290,8 +298,6 @@ public class MahjongTileProcessor {
 
         //convert color to grey scale
         Imgproc.cvtColor(clone, clone, Imgproc.COLOR_RGB2GRAY);
-
-        //TODO: consider adjust histogram for brightness
 
         //ClAHE is used to adjust contrast to help with clear edging
 
