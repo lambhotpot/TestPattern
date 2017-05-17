@@ -23,8 +23,8 @@ public class Main {
         Mat test3 = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/wan_1-9.png");
 
         MahjongTileProcessor analyser = new MahjongTileProcessor(9);
-        analyser.process(test);
-        analyser.process(test2);
+        //analyser.process(test);
+        //analyser.process(test2);
         analyser.process(test3);
 
 

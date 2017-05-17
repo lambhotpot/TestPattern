@@ -1,5 +1,6 @@
 package com.test.analyser;
 
+import com.test.domain.MahjongMainColor;
 import com.test.domain.MahjongParameters;
 import com.test.domain.MahjongTileAnalyseResult;
 import com.test.util.OpenCVUtil;
@@ -68,6 +69,7 @@ public class MahjongTileProcessor {
         return result;
     }
 
+
     private void analysePattern(Mat tile, MahjongTileAnalyseResult result) {
         //Read library file:
         Set<String> libraryPaths = result.getLibraryPaths();
@@ -80,6 +82,7 @@ public class MahjongTileProcessor {
                     Mat libImageMat = null;
                     try {
                         libImageMat = Imgcodecs.imread(libraryImageFile.getCanonicalFile().toString());
+                        //TODO: we want to analyse the pattern for lib image too esp for color in advance
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -89,9 +92,11 @@ public class MahjongTileProcessor {
                 }
             }
         }
+    }
 
-
-
+    private void analyseLibTile(Mat libImageMat, MahjongTileAnalyseResult libResult) {
+        analyseColor(libImageMat,libResult);
+        //other type of analysis pending
     }
 
 
@@ -144,16 +149,29 @@ public class MahjongTileProcessor {
 
 
     private void analyseColor(Mat tile, MahjongTileAnalyseResult result) {
-        Mat colorMask = tile.clone();
-        double[] fullTileColor = computeColorPercentage(colorMask);
-        result.setRedPercentage(fullTileColor[0]);
-        result.setBlackPercentage(fullTileColor[1]);
-        result.setBlueGreenPercentage(fullTileColor[2]);
-        //TODO: need to detect bottom half top half color too
-        //Mat croppedFrame = frame(Rect(0, frame.rows/2, frame.cols, frame.rows/2));
 
+        Mat colorMask = tile.clone();
+        Mat top = new Mat(colorMask,new Rect(0,0,tile.width(),tile.height()/2));
+        Mat bottom= new Mat(colorMask,new Rect(0,tile.height()/2,tile.width(),tile.height()/2));
+        Mat left= new Mat(colorMask,new Rect(0,0,tile.width()/2,tile.height()));
+        Mat right= new Mat(colorMask,new Rect(tile.width()/2,0,tile.width()/2,tile.height()));
+
+        double[] fullTileColor = computeColorPercentage(colorMask);
+        double[] topTileColor = computeColorPercentage(top);
+        double[] botTileColor = computeColorPercentage(bottom);
+        double[] leftTileColor = computeColorPercentage(left);
+        double[] rightTileColor = computeColorPercentage(right);
+
+        result.setFullTileColor(new MahjongMainColor(fullTileColor[0],fullTileColor[1],fullTileColor[2]));
+        result.setBottomTileColor(new MahjongMainColor(topTileColor[0],topTileColor[1],topTileColor[2]));
+        result.setTopTileColor(new MahjongMainColor(botTileColor[0],botTileColor[1],botTileColor[2]));
+        result.setLeftTileColor(new MahjongMainColor(leftTileColor[0],leftTileColor[1],leftTileColor[2]));
+        result.setRightTileColor(new MahjongMainColor(rightTileColor[0],rightTileColor[1],rightTileColor[2]));
 
     }
+
+
+
 
     private double[] computeColorPercentage(Mat colorMask) {
 
@@ -205,7 +223,7 @@ public class MahjongTileProcessor {
 
         FeatureDetector detector = FeatureDetector.create(FeatureDetector.SIMPLEBLOB);
         //read a file for parameters
-        detector.read("src/resources/config/simpleBlob.xml");
+        detector.read(MahjongParameters.blobConfigPath);
         MatOfKeyPoint keyPoints = new MatOfKeyPoint();
         detector.detect(tile, keyPoints);
         int numberOfObjects = (int) keyPoints.size().height;
