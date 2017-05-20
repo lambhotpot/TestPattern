@@ -21,20 +21,18 @@ public class MahjongTileAnalyseResult {
 
 
     public MahjongTileAnalyseResult() {
-        try {
-            intializeOrbResult();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    private void intializeOrbResult() throws IOException {
-        //read directory names:
-        File folder = new File(MahjongParameters.libPath);
-        File[] listOfFiles = folder.listFiles();
-
-        for (File file : listOfFiles) {
-            orbResult.put(file.getCanonicalFile().toString(), new HashMap<>());
+    public void intializeOrbResult() {
+        //initialize the orb result data structure
+        try {
+            File folder = new File(MahjongParameters.libPath);
+            File[] listOfFiles = folder.listFiles();
+            for (File file : listOfFiles) {
+                orbResult.put(file.getCanonicalFile().toString(), new HashMap<>());
+            }
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 

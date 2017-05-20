@@ -59,6 +59,23 @@ public class MahjongMainColor {
         return MahjongParameters.INVALID_COLOR;
     }
 
+    public double getRedRatio (){
+        return redPercentage / (redPercentage+blackPercentage+blueGreenPercentage);
+    }
+
+    public double getBlueRatio (){
+        return blueGreenPercentage / (redPercentage+blackPercentage+blueGreenPercentage);
+    }
+
+
+    public double getBlackRatio (){
+        return blackPercentage / (redPercentage+blackPercentage+blueGreenPercentage);
+    }
+
+
+    public double getRedBlackRatio (){
+        return (redPercentage+blackPercentage)/(redPercentage+blackPercentage+blueGreenPercentage);
+    }
 
     @Override
     public String toString() {

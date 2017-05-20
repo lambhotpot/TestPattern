@@ -33,14 +33,22 @@ public class MahjongTileProcessor {
     public ArrayList<MahjongTileAnalyseResult> process(Mat orig, Mat clone) {
 
         preProcess(orig, clone);
-
-        ArrayList<Mat> tiles = findContours(orig, clone);
-
-        //for each tile analyse the tile
         ArrayList<MahjongTileAnalyseResult> results = new ArrayList<>();
-        for (Mat tile : tiles) {
-            results.add(analyseTile(tile));
+
+        //TODO: to see if we can skip finding coutour step by camera bounded area
+        if (this.numberOfTiles > 1) {
+            //only find contour if the tile number is greater than 1
+            ArrayList<Mat> tiles = findContours(orig, clone);
+            //for each tile analyse the tile
+            for (Mat tile : tiles) {
+                results.add(analyseTile(tile));
+            }
+
+        } else {
+
+            results.add(analyseTile(orig));
         }
+
         return results;
     }
 
@@ -70,33 +78,41 @@ public class MahjongTileProcessor {
     }
 
 
-    private void analysePattern(Mat tile, MahjongTileAnalyseResult result) {
+    public MahjongTileAnalyseResult analyseLibraryTile(Mat input) {
+        Mat tile = input.clone();
+        //ressize library tile to standard size
+        Imgproc.resize(tile, tile, new Size(MahjongParameters.tileStdWidth, MahjongParameters.tileStdHeight));
+        MahjongTileAnalyseResult libResult = new MahjongTileAnalyseResult();
+        //first of all analyse each tile color percentage
+        analyseColor(tile, libResult);
+        return libResult;
+    }
+
+
+    public void analysePattern(Mat tile, MahjongTileAnalyseResult result) {
+        //initialise library object
+        result.intializeOrbResult();
         //Read library file:
         Set<String> libraryPaths = result.getLibraryPaths();
-        for(String libraryPath:libraryPaths){
+        for (String libraryPath : libraryPaths) {
             File tileFolder = new File(libraryPath);
             File[] listOfLibTiles = tileFolder.listFiles();
-            for (File libraryImageFile:listOfLibTiles
+            for (File libraryImageFile : listOfLibTiles
                     ) {
                 if (libraryImageFile.isFile()) {
                     Mat libImageMat = null;
                     try {
                         libImageMat = Imgcodecs.imread(libraryImageFile.getCanonicalFile().toString());
-                        //TODO: we want to analyse the pattern for lib image too esp for color in advance
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     final double pctScore = compareTileWithLibImage(tile, libImageMat);
                     //Add Matching Score
-                    result.setScoreForLibrary(libraryPath,libraryImageFile.getName(),pctScore);
+                    result.setScoreForLibrary(libraryPath, libraryImageFile.getName(), pctScore);
                 }
             }
         }
-    }
-
-    private void analyseLibTile(Mat libImageMat, MahjongTileAnalyseResult libResult) {
-        analyseColor(libImageMat,libResult);
-        //other type of analysis pending
     }
 
 
@@ -139,11 +155,11 @@ public class MahjongTileProcessor {
         double goodMatch = good_matchesList.size();
         double libTotalKeyPoints = keypointsLib.size().height;
         double matchPercentage = goodMatch * 100 / libTotalKeyPoints;
-        //System.out.println("Good Match size: " + goodMatch);
-        Features2d.drawMatchesKnn(tile,keypointsTile,libImage,keypointsLib,good,output);
-        if(matchPercentage>10)
-        OpenCVUtil.draw(output, String.valueOf(matchPercentage));
-        //System.out.println("Good Match Percentage: " + matchPercentage);
+        //------This section is used for debug-----------------------------------------
+        Features2d.drawMatchesKnn(tile, keypointsTile, libImage, keypointsLib, good, output);
+        if (matchPercentage > 10)
+            OpenCVUtil.draw(output, String.valueOf(matchPercentage));
+        //-----end of section-----------------------------------------
         return matchPercentage;
     }
 
@@ -151,26 +167,24 @@ public class MahjongTileProcessor {
     private void analyseColor(Mat tile, MahjongTileAnalyseResult result) {
 
         Mat colorMask = tile.clone();
-        Mat top = new Mat(colorMask,new Rect(0,0,tile.width(),tile.height()/2));
-        Mat bottom= new Mat(colorMask,new Rect(0,tile.height()/2,tile.width(),tile.height()/2));
-        Mat left= new Mat(colorMask,new Rect(0,0,tile.width()/2,tile.height()));
-        Mat right= new Mat(colorMask,new Rect(tile.width()/2,0,tile.width()/2,tile.height()));
+        Mat top = new Mat(colorMask, new Rect(0, 0, tile.width(), tile.height() / 2));
+        Mat bottom = new Mat(colorMask, new Rect(0, tile.height() / 2, tile.width(), tile.height() / 2));
+        Mat left = new Mat(colorMask, new Rect(0, 0, tile.width() / 2, tile.height()));
+        Mat right = new Mat(colorMask, new Rect(tile.width() / 2, 0, tile.width() / 2, tile.height()));
 
+        double[] topTileColor = computeColorPercentage(top.clone());
+        double[] botTileColor = computeColorPercentage(bottom.clone());
+        double[] leftTileColor = computeColorPercentage(left.clone());
+        double[] rightTileColor = computeColorPercentage(right.clone());
         double[] fullTileColor = computeColorPercentage(colorMask);
-        double[] topTileColor = computeColorPercentage(top);
-        double[] botTileColor = computeColorPercentage(bottom);
-        double[] leftTileColor = computeColorPercentage(left);
-        double[] rightTileColor = computeColorPercentage(right);
 
-        result.setFullTileColor(new MahjongMainColor(fullTileColor[0],fullTileColor[1],fullTileColor[2]));
-        result.setBottomTileColor(new MahjongMainColor(topTileColor[0],topTileColor[1],topTileColor[2]));
-        result.setTopTileColor(new MahjongMainColor(botTileColor[0],botTileColor[1],botTileColor[2]));
-        result.setLeftTileColor(new MahjongMainColor(leftTileColor[0],leftTileColor[1],leftTileColor[2]));
-        result.setRightTileColor(new MahjongMainColor(rightTileColor[0],rightTileColor[1],rightTileColor[2]));
+        result.setFullTileColor(new MahjongMainColor(fullTileColor[0], fullTileColor[1], fullTileColor[2]));
+        result.setBottomTileColor(new MahjongMainColor(topTileColor[0], topTileColor[1], topTileColor[2]));
+        result.setTopTileColor(new MahjongMainColor(botTileColor[0], botTileColor[1], botTileColor[2]));
+        result.setLeftTileColor(new MahjongMainColor(leftTileColor[0], leftTileColor[1], leftTileColor[2]));
+        result.setRightTileColor(new MahjongMainColor(rightTileColor[0], rightTileColor[1], rightTileColor[2]));
 
     }
-
-
 
 
     private double[] computeColorPercentage(Mat colorMask) {
