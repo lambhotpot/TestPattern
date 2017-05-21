@@ -63,5 +63,6 @@ public enum MahjongParameters {
      */
      public static final String libPath = "src/resources/tileLibrary";
      public static final String blobConfigPath = "src/resources/config/simpleBlob.xml";
+     public static final String circleBlobConfigPath = "src/resources/config/circleBlob.xml";
 
 }

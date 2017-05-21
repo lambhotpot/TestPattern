@@ -26,14 +26,16 @@ public class Main {
         Mat test = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tong_1-9.png");
         Mat test2 = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/tiao_1-9.png");
         Mat test3 = Imgcodecs.imread("src/resources/data/demo_photo_std1_chains/wan_1-9.png");
-        Mat test5 = Imgcodecs.imread("src/resources/tileLibrary/demo_photo_std1_chopped/zi_zhong.png");
+        Mat test5 = Imgcodecs.imread("src/resources/tileLibrary/demo_photo_std1_chopped/tong8.png");
+        Mat test6 = Imgcodecs.imread("src/resources/data/demo-images/tong8.png");
 
 
-
-        MahjongTileProcessor processor = new MahjongTileProcessor(1);
-        ArrayList<MahjongTileAnalyseResult> processResult = processor.process(test5);
+        MahjongTileProcessor processor = new MahjongTileProcessor(9);
+        ArrayList<MahjongTileAnalyseResult> processResult = processor.process(test3);
         for (MahjongTileAnalyseResult res: processResult
              ) {
+            System.out.println("obj:-----"+res.getNumberOfObject());
+            System.out.println("circle obj:-----"+res.getNumberOfCircleObjects());
             System.out.println("isWan:-----"+MahjongTileClassifier.isWan(res));
             System.out.println("isHongZhong:-----"+MahjongTileClassifier.isZi_Zhong(res));
 

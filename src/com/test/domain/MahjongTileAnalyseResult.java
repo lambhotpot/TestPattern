@@ -16,9 +16,20 @@ public class MahjongTileAnalyseResult {
     private MahjongMainColor rightTileColor = new MahjongMainColor();
 
     private int numberOfObjects = 0;
+    private int numberOfCircleObjects = 0;
+
+    public int getNumberOfObject (){
+        return numberOfObjects;
+    }
+
+    public int getNumberOfCircleObjects(){
+        return numberOfCircleObjects;
+    }
 
 
-
+    public void setNumberOfCircleObjects(int numberOfCircleObjects ){
+        this.numberOfCircleObjects = numberOfCircleObjects;
+    }
 
     public MahjongTileAnalyseResult() {
     }

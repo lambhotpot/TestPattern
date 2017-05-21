@@ -67,6 +67,8 @@ public class MahjongTileProcessor {
         MahjongTileAnalyseResult result = new MahjongTileAnalyseResult();
         //simple blob
         analyseSimpleBlob(tile, result);
+        //count circle
+        analyseCircleBlob(tile, result);
         //color
         analyseColor(tile, result);
         //ORB extraction
@@ -245,6 +247,21 @@ public class MahjongTileProcessor {
         //OpenCVUtil.draw(tile, String.valueOf(numberOfObjects));
 
     }
+
+
+    private void analyseCircleBlob(Mat tile, MahjongTileAnalyseResult result) {
+        //simple blob, no preprocessing to the tile
+        FeatureDetector detector = FeatureDetector.create(FeatureDetector.SIMPLEBLOB);
+        //read a file for parameters
+        detector.read(MahjongParameters.circleBlobConfigPath);
+        MatOfKeyPoint keyPoints = new MatOfKeyPoint();
+        detector.detect(tile, keyPoints);
+        int numberOfObjects = (int) keyPoints.size().height;
+        result.setNumberOfCircleObjects(numberOfObjects);
+        //OpenCVUtil.draw(tile, String.valueOf(numberOfObjects));
+
+    }
+
 
     private ArrayList<Mat> findContours(Mat orig, Mat copy) {
 
